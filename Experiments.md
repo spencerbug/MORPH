@@ -75,3 +75,7 @@ Results: unseen H8 foreground-union MSE S=0.048574, U=0.107351, P=0.288143, W=0.
 Interpretation: positive for the registered recipe comparison, qualified as mechanistic evidence. U seeds 1–4 are effectively action-insensitive and reconstruct poorly. The known pixel warp is substantially stronger than either learned model. Do not claim clean compositional generalization over an equally trained baseline, or any support yet for MORPH memory/migration.
 
 Next decision: propose E0b to improve/check baseline optimization before E1. A single possible intervention is zero-initializing U's residual output layer; register it and fresh audit data before execution. E0b has not been implemented or run. Preserve E0 without changing its criteria or excluding failed seeds.
+
+## 2026-10-04 — E0 report clarity revision
+
+Clarified the input-to-prediction task, a concrete eight-step rotation example, supplied versus learned structure, the meaning of seen/unseen objects, and pixel MSE versus identity recognition. Renamed result-table columns to distinguish new and familiar objects. This is an explanatory edit only: measured results, experiment contract, acceptance criteria and artifacts are unchanged. No experiment was rerun.

@@ -38,3 +38,7 @@ Do not regenerate the existing dataset or overwrite completed experiments. A new
 ## Verification
 
 Six contract tests passed. Audit checked 133 dataset-file hashes, 96 distinct object definitions, ten selected fit budgets/checkpoints and 2,048 committed prediction/score pairs. Report figures were visually inspected; local Markdown links and source compilation passed. Scientific uncertainty and optimization failures are retained in the report and ledger.
+
+## Latest documentation change
+
+The E0 report now explains the one-image-to-rotated-images task before presenting results. It explicitly defines unseen objects as shapes excluded from training across all views, distinguishes pixel error from recognition, and identifies the rotation structure supplied by the experiment. This documentation-only revision did not rerun or alter E0.

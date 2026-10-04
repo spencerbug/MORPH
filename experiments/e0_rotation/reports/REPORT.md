@@ -1,12 +1,61 @@
-# E0 report: prescribed SO(2) action and image prediction
+# E0 report: predicting rotated images from one observed view
 
 2026-10-04 · Completed locally · Contract: [E0-v1.1](../SPEC.md)
 
+## What this experiment asks
+
+**Given one image of an object and a sequence of rotation commands, can the model predict what the object will look like after those rotations?**
+
+For example, the model receives one grayscale image and the instruction “rotate counterclockwise by 15° eight times.” It must predict the resulting images, including the final view after 120°, without seeing any intermediate images. The evaluator then compares its predictions with images rendered from the actual object.
+
+This is **pixel prediction**. There is no object-name output, identity lookup, recognition score or persistent object memory in E0.
+
+### What the model learns—and what we supply
+
+The learned path is:
+
+```text
+One 32×32 image → encoder → 48-number latent representation
+                                      ↓ rotation commands
+                           updated latent representation
+                                      ↓ decoder
+                              predicted rotated images
+```
+
+The encoder learns to turn raw pixels into a representation; the decoder learns to turn that representation back into pixels. In the structured model, we supply the mathematical rule for how rotation changes 16 of those latent coordinates. The other 32 coordinates are encouraged to retain information that stays stable across rotation. “SO(2)” is the mathematical name for this family of 2-D rotations.
+
+The model therefore learns a representation useful for predicting rotated views. We have **not** established that it learns an explicit geometric model, that its latent coordinates correspond to physical points, or that its stable coordinates uniquely identify an object. In particular, the rotation rule is supplied rather than discovered. The shapes rotate within the image plane; no hidden back side or 3-D surface needs to be inferred.
+
+### What “seen,” “unseen,” and “MSE” mean
+
+| Term in this report | Meaning |
+|---|---|
+| **Unseen object** | An object's shape was excluded from training in every view. At evaluation, the model receives one initial image of that new object and predicts its rotated views. |
+| **Seen object** | Its shape appeared during training. Evaluation uses fresh starting angles and action sequences, still requiring pixel prediction. |
+| **Unseen view** | Not the split used to define the main result. Training angles span the full circle; we did not reserve an orientation range as the main test. |
+| **H8 / eight-step prediction** | The predicted image after eight rotation commands, computed from the initial image without intermediate observations. |
+| **MSE** | Mean squared error: square each difference between a predicted pixel and its target pixel, then average. Pixels range from 0 to 1; zero error means an exact match. Lower is better. It is not recognition accuracy. |
+| **Foreground-union MSE** | Pixel error averaged over locations occupied by the object in either the initial image or the target image. This prevents the large black background from dominating the score. The evaluator supplies these regions only for scoring. |
+| **Full-image MSE** | Pixel error averaged over the entire image, including background. This also catches incorrect predictions outside the scored foreground region. |
+
+Thus, **“unseen-object MSE” means how accurately the model predicts rotated pixels for a shape it never trained on**, after receiving one image of that shape. It does not mean how well the model recognizes a familiar object from an unfamiliar view.
+
+### What the comparison tests
+
+| Method | How it predicts the next image |
+|---|---|
+| **Structured S** | Learns the encoder/decoder; uses a supplied rotation rule to update the latent representation. |
+| **Unrestricted U** | Learns the same encoder/decoder design and a neural network that updates the latent representation from the rotation command. |
+| **Persistence P** | Repeats the initial image, ignoring rotation. |
+| **Known pixel warp W** | Rotates the initial pixels directly using the known angle and pivot, with no learned latent representation. |
+
+The question is whether supplying rotation structure helps the learned predictor under the same training budget. The pixel-warp control shows how well a direct geometric solution can do in this deliberately simple setting.
+
 ## Outcome and decision
 
-**E0 passes its preregistered numerical gates.** The structured model reduced unseen-object, eight-step foreground-union MSE by **54.8%** relative to the unrestricted transition: **0.048574 versus 0.107351**. The paired 95% bootstrap interval for relative reduction is **35.8%–70.5%**. Structured prediction won in **5/5 paired model seeds**.
+**E0 met all numerical acceptance criteria fixed before evaluation.** For objects excluded from training, the structured model made **54.8% less squared pixel error** after eight rotation steps than the unrestricted model: **0.048574 versus 0.107351**. The paired 95% bootstrap interval for relative reduction is **35.8%–70.5%**. Structured prediction won in **5/5 paired model seeds** (five training runs with different random initializations). This is an error reduction, not a 54.8% recognition rate.
 
-**The mechanistic conclusion remains limited.** Four of the five selected unrestricted checkpoints are effectively insensitive to action sign and reconstruct substantially worse than the structured models. This comparison demonstrates an advantage for the specified structured training recipe under the fixed budget. It does not cleanly show an advantage from compositional extrapolation among equally well-trained predictors. The known image-warp control is much more accurate than either learned system.
+**The result does not yet establish why the structured model wins.** Four of the five selected unrestricted checkpoints are effectively insensitive to action sign and reconstruct substantially worse than the structured models. This comparison demonstrates an advantage for the specified structured training recipe under the fixed budget. We therefore cannot yet separate a benefit from combining rotations correctly over many steps from a benefit in simply getting the model to learn successfully. The known image-warp control is much more accurate than either learned system.
 
 Decision: preserve E0 as a completed positive result with a baseline-quality qualification. **Do a baseline optimization check before adding translation, memory, grouping or migration.** Do not remove unfavorable seeds or change E0's outcome retrospectively.
 
@@ -16,7 +65,7 @@ A single fully visible planar object rotates about a known image-center pivot. E
 
 The split contains 64 training, 16 validation and 16 unseen test objects, with separate 2-fold and 4-fold symmetric diagnostic objects. There are 8,192 two-transition training episodes. Evaluation uses 32 initial angles per object per schedule, with identical inputs/actions across methods. Absolute orientations are already covered during training: this is a test of new shapes and longer action sequences, not a claim of unseen absolute-angle generalization.
 
-Both learned models use the same convolutional encoder/decoder, 32-dimensional approximately invariant block, 16-dimensional pose-bearing block, losses, data order and 50-epoch budget. Structured S applies prescribed SO(2) harmonic rotations to the pose block. Unrestricted U predicts a residual pose update with an MLP. Both keep the identity block unchanged during rollout. No future observations are fed back during prediction.
+Both learned models use the same convolutional encoder/decoder, 32-dimensional approximately invariant block, 16-dimensional pose-bearing block, losses, data order and 50-epoch budget. Structured S applies prescribed SO(2) harmonic rotations to the pose block. Unrestricted U predicts a residual pose update with an MLP. Both keep the 32-coordinate stable block unchanged during prediction. The architecture calls this the “identity block,” but E0 does not test whether it identifies individual objects. No future observations are fed back during prediction.
 
 Six seed-zero pilot fits compared three learning rates per method. Validation selected **S: 0.001** and **U: 0.0003**; these choices were frozen before the remaining seeds and test evaluation. The selected seed-zero fits were reused. Thus the campaign contains **14 full fits, 700 epochs and 89,600 optimizer steps**, plus two one-epoch smoke fits. No full fit was discarded or retried. Selected checkpoints minimize validation horizon-eight error; they are not necessarily final-epoch checkpoints.
 
@@ -26,9 +75,9 @@ S has **181,969** parameters; U has **186,209**. U has more trainable capacity a
 
 ## Primary and control results
 
-Lower error is better. Learned-model entries average five seeds, objects, initial angles and both monotone signs with the registered equal weighting. P and W are deterministic controls.
+All entries below measure predicted pixels, not object identification. “New” means excluded from training in every view; “familiar” means included in training. H8 is the eighth predicted step. Lower error is better. Learned-model entries average five seeds, objects, initial angles and both monotone signs with the registered equal weighting. P and W are deterministic controls.
 
-| Model | Unseen H8 foreground MSE | Unseen H8 full-image MSE | One-step foreground MSE | Seen H8 foreground MSE |
+| Model | New objects: H8 foreground MSE | New objects: H8 full-image MSE | New objects: one-step foreground MSE | Familiar objects: H8 foreground MSE |
 |---|---:|---:|---:|---:|
 | Structured S | 0.048574 | 0.005289 | 0.019683 | 0.046094 |
 | Unrestricted U | 0.107351 | 0.011787 | 0.110496 | 0.105222 |
@@ -48,6 +97,8 @@ The one-step column averages the five training increments on unseen objects. It 
 The aggregate reduction is the ratio of mean errors, not the mean of these percentages. The interval uses 2,000 paired bootstrap draws over the five seed indices and sixteen unseen-object indices, preserving method pairing and episode groups. It does not treat pixels or rollout horizons as independent samples. Five seeds and one synthetic object generator give preliminary evidence, not a broad population guarantee. The complete paired arrays and bootstrap draws are in [paired_primary.npz](paired_primary.npz).
 
 ![Prediction metrics](prediction_metrics.png)
+
+In this figure, “unseen-object” also means a new shape, not a withheld view of a familiar shape. A rollout horizon is the number of commands applied without another observation.
 
 | Registered decision rule | Observed | Decision |
 |---|---|---|

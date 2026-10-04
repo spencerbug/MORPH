@@ -1,0 +1,18 @@
+{
+  "files": {
+    "experiments/e0_rotation/src/e0_rotation/run.py": "e177c2a26c883c1e1751ca4a3c1ecc79505f7773aa03a816d5c0c6da4e07e605",
+    "experiments/e0_rotation/src/e0_rotation/audit.py": "c2ccc25317810bbafe8e8851bbed4b8ef7ebbd1793d221ccff3747d77d437439",
+    "experiments/e0_rotation/src/e0_rotation/__init__.py": "df62bfa42be02e715811ed6f747b537aa4b1c43cc473e599a3ec3c5caaada375",
+    "experiments/e0_rotation/src/e0_rotation/model.py": "e230271505b0ff54e4657b3a2ab2159ee7c7a8dfe62547b0362dece5bda624c9",
+    "experiments/e0_rotation/src/e0_rotation/evidence.py": "8f733fd714ea9e56b6631c241c3eca6db5431ab44a1fd3bf85d7534149b9493b",
+    "experiments/e0_rotation/src/e0_rotation/data.py": "75150311161d4287f0186bdd1aecd37a420bb6ac1007af44a35f0f57fc835716",
+    "experiments/e0_rotation/src/e0_rotation/analyze.py": "0472d74082ca8f491ed9de55c8ba81c115accaf0ea93db94c813858953792456",
+    "experiments/e0_rotation/tests/test_contracts.py": "5b6f3f6371d0b4d7c3a799c7e19dea701932f1a107e046c26b177153a2744d54",
+    "experiments/e0_rotation/configs/e0.json": "99b09595115521242d0f70e74bec91c93875d9e631d238bf1988fc0f5ebf9416",
+    "experiments/e0_rotation/SPEC.md": "29fe53f75329990d734c74c9c4390872d55e9a6b998827303a38b0a77d6ad1f5",
+    "requirements-lock.txt": "a42c3a2eac80edbd045e45cd81a9b03c3fba3831325f89a46a3d8b70060070fd"
+  },
+  "dataset_manifest_sha256": "d2c5b3a939476ff28dd607da7b1c0b5c0c1ede2e6e9dfad83e1e8cb0d1524e7e",
+  "selection_sha256": "91c2c787db34a8de8384afe57cf154f01b00ba08081155d8ce998e488aa80a43",
+  "note": "Final code/config/environment manifest. Each original fit also retains its own source snapshot and provenance."
+}

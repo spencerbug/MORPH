@@ -1,6 +1,6 @@
 # Experiment ledger and staged plan
 
-No experiments have been executed. All numbers below are proposed configurations or decision rules, not results. Active contract: [SPEC.md](SPEC.md). Broader architecture: [capture](architecture/capture.md).
+E0 has now been executed; see the completed run record below. Earlier design entries are historical and their proposed values are not results. Active contract: [SPEC.md](SPEC.md). Broader architecture: [capture](architecture/capture.md).
 
 ## 2026-10-04 — Design record D0
 
@@ -12,7 +12,7 @@ Decision: use a 16-dimensional harmonic pose-bearing code, not a supervised scal
 
 Decision: E0 uses known group operators. Learned generators and motor-to-motion mappings are deferred. No pose or identity training labels. No confirmation-confidence claims from pixel MSE.
 
-## E0 — Prescribed rotation and predictive transfer (active; designed)
+## E0 — Prescribed rotation and predictive transfer (original design)
 
 Hypothesis, exact configuration, interfaces, splits and acceptance criteria are in SPEC.md; do not duplicate mutable numeric settings here. Observations are one complete grayscale image; action is an exact angular displacement. Compare structured S, unrestricted U, persistence P and known pixel warp W. Train on two-step sequences and evaluate longer compositions and new geometries without intermediate observations.
 
@@ -57,3 +57,21 @@ Create an append-only entry with:
 - Artifact paths, paired baseline metrics with uncertainty, qualitative failures and integrity-check outcomes.
 - Interpretation: supported, negative or invalid against the registered gate; limits of that conclusion.
 - Next decision and any prospective spec change. Preserve crashes, abandoned runs and adverse results; do not replace them with the best run.
+
+## 2026-10-04 — Implementation record D1 (before model results)
+
+User authorized implementing/running E0 and reporting results, with a super-repository organization. Registered E0-v1.1 clarifications in SPEC.md and config before training. Code is local to `experiments/e0_rotation`; generated artifacts are ignored under `artifacts/e0_rotation`. Local Python 3.12 environment and a dependency lock were created. No hypothesis, epoch budget, loss, split size or numerical scientific gate changed.
+
+## 2026-10-04 — E0 completed (E0-v1.1)
+
+Report: [experiments/e0_rotation/reports/REPORT.md](experiments/e0_rotation/reports/REPORT.md). Frozen contract: [experiments/e0_rotation/SPEC.md](experiments/e0_rotation/SPEC.md). All work used the local repository and MPS device; environment is pinned in requirements-lock.txt.
+
+Commands from the repository root (each prefixed with `PYTHONPATH=experiments/e0_rotation/src .venv/bin/python`): `-m e0_rotation.run prepare`, `-m pytest -q`, `-m e0_rotation.run smoke --device mps`, `-m e0_rotation.run campaign --device mps`, `-m e0_rotation.run evaluate --device mps`, `-m e0_rotation.audit`, `-m e0_rotation.analyze`. Logs live under `artifacts/e0_rotation/`. Each fit contains exact config, source snapshot, environment, checkpoint hashes and epoch history. The experiment README provides copyable commands.
+
+Executed: two smoke fits, six seed-zero learning-rate pilots, and eight additional fits completing five paired seeds (14 full fits, 700 epochs, 89,600 steps; 783.5 seconds summed fit time). Validation selected S=0.001 and U=0.0003. All fits completed; no runs were dropped. Three pilot fits gave near-black predictions. Several selected-seed fits showed delayed or unstable optimization.
+
+Results: unseen H8 foreground-union MSE S=0.048574, U=0.107351, P=0.288143, W=0.003700. Relative reduction 54.8%, paired 95% bootstrap interval [35.8%,70.5%], wins in 5/5 seeds. All registered numerical gates pass, including one-step and full-image checks. Six contract tests and the artifact audit passed (133 files, 2,048 ticket/score pairs).
+
+Interpretation: positive for the registered recipe comparison, qualified as mechanistic evidence. U seeds 1–4 are effectively action-insensitive and reconstruct poorly. The known pixel warp is substantially stronger than either learned model. Do not claim clean compositional generalization over an equally trained baseline, or any support yet for MORPH memory/migration.
+
+Next decision: propose E0b to improve/check baseline optimization before E1. A single possible intervention is zero-initializing U's residual output layer; register it and fresh audit data before execution. E0b has not been implemented or run. Preserve E0 without changing its criteria or excluding failed seeds.

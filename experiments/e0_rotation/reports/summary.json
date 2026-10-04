@@ -1,0 +1,55 @@
+{
+  "relative_gain": 0.5475211180006254,
+  "paired_95_ci": [
+    0.35820718496215376,
+    0.7051299687686988
+  ],
+  "seed_wins": 5,
+  "gates": {
+    "gain_at_least_10_percent": true,
+    "paired_interval_above_zero": true,
+    "positive_gain_at_least_four_seeds": true,
+    "beats_persistence": true,
+    "one_step_noninferiority": true,
+    "full_image_not_worse": true
+  },
+  "scientific_gate_pass": true,
+  "metrics": [
+    {
+      "method": "S",
+      "test_h8_foreground": 0.048574222324160865,
+      "test_h8_full": 0.005288608372211456,
+      "test_one_step_foreground": 0.019683196256480052,
+      "seen_h8_foreground": 0.04609438804760916,
+      "symmetry2_h8_foreground": 0.05451342601476128,
+      "symmetry4_h8_foreground": 0.0181807951281722
+    },
+    {
+      "method": "U",
+      "test_h8_foreground": 0.10735135772419983,
+      "test_h8_full": 0.011787311173975468,
+      "test_one_step_foreground": 0.1104959609345163,
+      "seen_h8_foreground": 0.1052223507751829,
+      "symmetry2_h8_foreground": 0.10435596380491849,
+      "symmetry4_h8_foreground": 0.055249094122455655
+    },
+    {
+      "method": "P",
+      "test_h8_foreground": 0.2881428833033246,
+      "test_h8_full": 0.027368221431970596,
+      "test_one_step_foreground": 0.03816572099478795,
+      "seen_h8_foreground": 0.28682924705908186,
+      "symmetry2_h8_foreground": 0.2993338883618476,
+      "symmetry4_h8_foreground": 0.05764443929747626
+    },
+    {
+      "method": "W",
+      "test_h8_foreground": 0.003700399941592747,
+      "test_h8_full": 0.0004057148180436343,
+      "test_one_step_foreground": 0.0039060759423702514,
+      "seen_h8_foreground": 0.0037681168828464203,
+      "symmetry2_h8_foreground": 0.004380277100841587,
+      "symmetry4_h8_foreground": 0.003369463263761603
+    }
+  ]
+}

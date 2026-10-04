@@ -1,0 +1,13 @@
+[project]
+name = "morph-research"
+version = "0.1.0"
+description = "MORPH experiment super-repository"
+requires-python = ">=3.12,<3.14"
+dependencies = ["torch", "numpy", "matplotlib"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+pythonpath = ["experiments/e0_rotation/src"]
+testpaths = ["experiments/e0_rotation/tests"]

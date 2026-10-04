@@ -1,0 +1,13 @@
+{
+  "dataset_files_verified": 133,
+  "learner_input_schema": "pixels and actions only",
+  "distinct_geometry_hashes": 96,
+  "renderer_symmetry_max_mse": {
+    "2": 0.0,
+    "4": 0.0
+  },
+  "selected_runs_verified": 10,
+  "verified_ticket_score_pairs": 2048,
+  "test_predictions_after_selection": true,
+  "status": "passed"
+}

@@ -1,8 +1,8 @@
 # Active experiment specification
 
-Revision: E0-v1.1, 2026-10-04. Status: completed; see [the E0 report](experiments/e0_rotation/reports/REPORT.md). The frozen run contract is [here](experiments/e0_rotation/SPEC.md).
-Source interpretation: [architecture/capture.md](architecture/capture.md).
-Run ledger and later experiments: [Experiments.md](Experiments.md).
+Revision: E0-v1.1, 2026-10-04. Status: implementation in progress; no scientific results yet.
+Source interpretation: [architecture/capture.md](../../architecture/capture.md).
+Run ledger and later experiments: [Experiments.md](../../Experiments.md).
 
 ## Question and boundary
 
@@ -100,7 +100,7 @@ A validated run missing any scientific gate is **negative for E0's registered hy
 
 ## Deliverables and stop condition
 
-The implementation provides a local package, explicit config files, renderer/data manifests, tests for the contracts above, training/evaluation CLI and run artifacts under `artifacts/e0_rotation/runs/<run_id>/`. Each run stores config, source revision/diff, environment, seed, checkpoint hash, split hashes, tickets, predictions, metrics, learning curves and representative target/prediction/error images. Exact CLI commands are in experiments/e0_rotation/README.md.
+Next implementation should create a local package, explicit config files, renderer/data manifests, tests for the contracts above, training/evaluation CLI and run artifacts under `artifacts/e0_rotation/runs/<run_id>/`. Each run stores config, source revision/diff, environment, seed, checkpoint hash, split hashes, tickets, predictions, metrics, learning curves and representative target/prediction/error images. Choose and document exact CLI commands when implemented; none exists yet.
 
 Stop after E0 results and a recorded decision. Add at most one mechanism in the next experiment. No automatic full MORPH implementation or long compute sweep is implied by this specification.
 

@@ -1,0 +1,23 @@
+{
+  "spec": "E0-v1.1",
+  "geometry_seed": 100,
+  "train_seed": 200,
+  "validation_seed": 300,
+  "test_seed": 400,
+  "seen_seed": 401,
+  "symmetry_seeds": [500, 600],
+  "model_seeds": [0, 1, 2, 3, 4],
+  "train_objects": 64,
+  "validation_objects": 16,
+  "test_objects": 16,
+  "train_episodes_per_object": 128,
+  "eval_angles_per_object": 32,
+  "epochs": 50,
+  "batch_size": 64,
+  "learning_rates": [0.0003, 0.001, 0.003],
+  "loss_weights": {"reconstruction": 1, "future": 1, "latent": 0.1, "invariant": 0.1},
+  "bootstrap_seed": 700,
+  "bootstrap_draws": 2000,
+  "image_size": 32,
+  "supersampling": 4
+}
